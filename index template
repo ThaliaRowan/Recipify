@@ -1,0 +1,41 @@
+'use strict';
+
+const url = 'https://api.spoonacular.com/recipes/random?apiKey=2b040279bf3b44e39151bfb07f07e1d7';
+
+
+const updateUISuccess = function(data) {
+    const parsedData = JSON.parse(data);
+    return parsedData;
+}
+
+const updatUIError = function(error) {
+    console.log(error)
+}
+
+const responseMethod = function(httpRequest){
+    if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+            updateUISuccess(httpRequest.responseText);
+        } else {
+            updatUIError(httpRequest.status + ': ' + httpRequest.responseText); 
+        }
+    }
+}
+
+
+const createRequest = function(url) {
+  const httpRequest =  new XMLHttpRequest(url);
+  httpRequest.addEventListener('readystatechange', (url) => responseMethod(httpRequest));
+  httpRequest.open('GET', url);
+  httpRequest.send();
+};
+
+
+const displayRecipes = async () => {
+    const myInfo = await updateUISuccess();
+    console.log(myInfo);
+}
+
+displayRecipes();
+
+createRequest(url);
